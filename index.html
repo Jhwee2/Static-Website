@@ -1,227 +1,44 @@
-<!DOCTYPE html>
-<html lang="en" class="dark"> <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jared Hwee</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body class="scroll-smooth">
-    <nav class="bg-white shadow-md py-4 fixed w-full z-10 transition-colors duration-300 rounded-b-lg">
-        <div class="container mx-auto flex justify-between items-center px-6">
-            <a href="#hero" class="text-2xl font-bold text-indigo-600 rounded-md p-2 hover:bg-indigo-50 transition-colors duration-300">Jared Hwee</a>
-            <div class="flex items-center space-x-6">
-                <a href="#about" class="text-gray-800 hover:text-indigo-600 font-medium transition-colors duration-300 rounded-md p-2 hover:bg-gray-100">About Me</a>
-                <a href="#projects" class="text-gray-800 hover:text-indigo-600 font-medium transition-colors duration-300 rounded-md p-2 hover:bg-gray-100">My Work Experience</a>
-                <a href="#content" class="text-gray-800 hover:text-indigo-600 font-medium transition-colors duration-300 rounded-md p-2 hover:bg-gray-100">Content</a>
-                <a href="#contact" class="text-gray-800 hover:text-indigo-600 font-medium transition-colors duration-300 rounded-md p-2 hover:bg-gray-100">Contact</a>
-                </div>
-        </div>
-    </nav>
-
-    <section id="hero" class="relative bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-24 md:py-32 flex items-center justify-center min-h-screen rounded-b-xl shadow-lg">
-        <div class="container mx-auto text-center px-6">
-            <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4 animate-fade-in-down">
-                Hey, I'm <span class="text-yellow-300">Jared Hwee</span>
-            </h1>
-            <p class="text-xl md:text-2xl mb-8 animate-fade-in-up">
-                Connecting my passions and projects to build a better future.
-            </p>
-            <div class="space-x-4 animate-fade-in-up">
-                <a href="#projects" class="bg-white text-indigo-600 hover:bg-gray-100 px-8 py-3 rounded-full text-lg font-semibold shadow-lg transition-all duration-300 transform hover:scale-105">
-                    View My Work
-                </a>
-                <a href="#contact" class="border-2 border-white text-white hover:bg-white hover:text-indigo-600 px-8 py-3 rounded-full text-lg font-semibold shadow-lg transition-all duration-300 transform hover:scale-105">
-                    Get in Touch
-                </a>
+<section id="projects" class="py-16 md:py-24 bg-white dark:bg-gray-900 transition-colors duration-300 rounded-xl shadow-inner mx-auto max-w-7xl px-6">
+    <div class="container mx-auto">
+        <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-12 text-center">
+            <span class="text-indigo-500">&lt;</span> Work Experience <span class="text-indigo-500">/&gt;</span>
+        </h2>
+        
+        <div class="flex flex-col md:flex-row gap-8">
+            <div class="md:w-1/3 flex flex-col space-y-2">
+                <button onclick="loadExperience('healthfirst')" id="btn-healthfirst" class="exp-btn text-left px-6 py-4 rounded-lg font-semibold transition-all duration-300 bg-indigo-600 text-white shadow-lg border-l-4 border-indigo-400">
+                    Healthfirst
+                    <span class="block text-xs font-normal opacity-75 mt-1">Product Owner</span>
+                </button>
+                <button onclick="loadExperience('nys')" id="btn-nys" class="exp-btn text-left px-6 py-4 rounded-lg font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 border-l-4 border-transparent">
+                    NYS Office of ITS
+                    <span class="block text-xs font-normal opacity-75 mt-1">ServiceNow Developer</span>
+                </button>
+                <button onclick="loadExperience('unadat')" id="btn-unadat" class="exp-btn text-left px-6 py-4 rounded-lg font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 border-l-4 border-transparent">
+                    Unadat
+                    <span class="block text-xs font-normal opacity-75 mt-1">Project Manager Intern</span>
+                </button>
+                <button onclick="loadExperience('mta')" id="btn-mta" class="exp-btn text-left px-6 py-4 rounded-lg font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 border-l-4 border-transparent">
+                    MTA
+                    <span class="block text-xs font-normal opacity-75 mt-1">Data Analyst Intern</span>
+                </button>
             </div>
-        </div>
-    </section>
 
-    <section id="about" class="py-16 md:py-24 bg-gray-50 dark:bg-gray-800 transition-colors duration-300 rounded-xl shadow-inner mt-8 mx-auto max-w-7xl px-6">
-        <div class="container mx-auto flex flex-col md:flex-row items-center gap-12">
-            <div class="md:w-1/3 text-center">
-                <img src="image.jpg" alt="A professional headshot of Jared Hwee" class="rounded-full w-64 h-64 mx-auto object-cover shadow-xl border-4 border-indigo-300 dark:border-indigo-600">
-                <h2 class="text-3xl font-bold text-white-800 dark:text-white mt-6">About Me</h2>
-            </div>
             <div class="md:w-2/3">
-                <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
-                    As a Product Owner, I am driven by a passion for understanding user needs and translating them into tangible product features that deliver real value. My experience with agile methodologies, cross-functional teams, and cloud platforms like AWS enables me to define and prioritize roadmaps that not only meet business goals but also delight customers.
-                </p>
-                <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
-                    I went to Baruch College for my undergraduate degree in data analytics because I want to be a leader in the new age that artificial intelligence. My classes and leadership experience taught me how the foundations of how machine learning works and data science. In my free time, I follow the news on the investments in artifical intelligence. Even now this website was built with prompt engineering and AWS Amplify.
-                </p>
-                <h3 class="text-2xl font-semibold text-white-800 dark:text-white mb-4">My Skills:</h3>
-                <div class="flex flex-wrap gap-3">
-                    <span class="bg-indigo-100 text-indigo-800 text-sm font-medium px-4 py-2 rounded-full dark:bg-indigo-900 dark:text-indigo-200 shadow-sm">Product Strategy</span>
-                    <span class="bg-indigo-100 text-indigo-800 text-sm font-medium px-4 py-2 rounded-full dark:bg-indigo-900 dark:text-indigo-200 shadow-sm">Agile Methodologies</span>
-                    <span class="bg-indigo-100 text-indigo-800 text-sm font-medium px-4 py-2 rounded-full dark:bg-indigo-900 dark:text-indigo-200 shadow-sm">Data Analysis & Metrics</span>
-                    <span class="bg-indigo-100 text-indigo-800 text-sm font-medium px-4 py-2 rounded-full dark:bg-indigo-900 dark:text-indigo-200 shadow-sm">AWS (S3, CloudFront, Lambda, IAM)</span>
-                    <span class="bg-indigo-100 text-indigo-800 text-sm font-medium px-4 py-2 rounded-full dark:bg-indigo-900 dark:text-indigo-200 shadow-sm">Git/GitHub</span>
+                <div class="bg-gray-800 rounded-lg shadow-2xl overflow-hidden border border-gray-700 h-full min-h-[400px] flex flex-col">
+                    <div class="bg-gray-900 px-4 py-2 flex items-center space-x-2 border-b border-gray-700">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        <span class="ml-4 text-xs text-gray-400 font-mono">jared_hwee@portfolio:~/experience</span>
+                    </div>
+                    <div class="p-6 font-mono text-sm md:text-base text-green-400 overflow-y-auto flex-grow">
+                        <div id="terminal-content">
+                            </div>
+                        <span class="animate-pulse inline-block w-2 h-5 bg-green-400 align-middle ml-1"></span>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
-
-    <hr class="border-t-2 border-gray-200 dark:border-gray-700 my-12 mx-auto w-4/5">
-
-    <section id="projects" class="py-16 md:py-24 bg-white dark:bg-gray-900 transition-colors duration-300 rounded-xl shadow-inner mx-auto max-w-7xl px-6">
-        <div class="container mx-auto text-center">
-            <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-12">My Work Experience</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                <div class="bg-gray-50 dark:bg-gray-800 p-8 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://placehold.co/400x250/d1d5db/4b5563?text=Project+1+Image" alt="Project 1" class="rounded-md mb-6 w-full h-48 object-cover">
-                    <h3 class="text-2xl font-semibold text-gray-800 dark:text-white mb-3">Secure Chat Application</h3>
-                    <p class="text-gray-600 dark:text-gray-300 mb-4">
-                        A real-time chat application with end-to-end encryption and robust authentication using Node.js, WebSockets, and a NoSQL database.
-                    </p>
-                    <div class="flex flex-wrap justify-center gap-2 mb-4">
-                        <span class="bg-green-100 text-green-800 text-xs font-medium px-3 py-1 rounded-full dark:bg-green-900 dark:text-green-200">Node.js</span>
-                        <span class="bg-green-100 text-green-800 text-xs font-medium px-3 py-1 rounded-full dark:bg-green-900 dark:text-green-200">WebSockets</span>
-                        <span class="bg-green-100 text-green-800 text-xs font-medium px-3 py-1 rounded-full dark:bg-green-900 dark:text-green-200">MongoDB</span>
-                        <span class="bg-green-100 text-green-800 text-xs font-medium px-3 py-1 rounded-full dark:bg-green-900 dark:text-green-200">Encryption</span>
-                    </div>
-                    <div class="flex justify-center space-x-4">
-                        <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium flex items-center">
-                            Live Demo
-                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                        </a>
-                        <a href="#" class="text-gray-600 hover:text-gray-800 font-medium flex items-center dark:text-gray-400 dark:hover:text-gray-200">
-                            GitHub
-                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="bg-gray-50 dark:bg-gray-800 p-8 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://placehold.co/400x250/d1d5db/4b5563?text=Project+2+Image" alt="Project 2" class="rounded-md mb-6 w-full h-48 object-cover">
-                    <h3 class="text-2xl font-semibold text-gray-800 dark:text-white mb-3">AWS Serverless Portfolio</h3>
-                    <p class="text-gray-600 dark:text-gray-300 mb-4">
-                        A serverless portfolio website hosted on AWS S3, CloudFront, and Lambda, demonstrating CI/CD pipelines and scalable architecture.
-                    </p>
-                    <div class="flex flex-wrap justify-center gap-2 mb-4">
-                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-1 rounded-full dark:bg-blue-900 dark:text-blue-200">AWS S3</span>
-                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-1 rounded-full dark:bg-blue-900 dark:text-blue-200">CloudFront</span>
-                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-1 rounded-full dark:bg-blue-900 dark:text-blue-200">Lambda</span>
-                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-1 rounded-full dark:bg-blue-900 dark:text-blue-200">CI/CD</span>
-                    </div>
-                    <div class="flex justify-center space-x-4">
-                        <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium flex items-center">
-                            Live Demo
-                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                        </a>
-                        <a href="#" class="text-gray-600 hover:text-gray-800 font-medium flex items-center dark:text-gray-400 dark:hover:text-gray-200">
-                            GitHub
-                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="bg-gray-50 dark:bg-gray-800 p-8 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://placehold.co/400x250/d1d5db/4b5563?text=Project+3+Image" alt="Project 3" class="rounded-md mb-6 w-full h-48 object-cover">
-                    <h3 class="text-2xl font-semibold text-gray-800 dark:text-white mb-3">Customer Feedback Portal</h3>
-                    <p class="text-gray-600 dark:text-gray-300 mb-4">
-                        A web application for collecting and analyzing real-time customer feedback, enabling data-driven decisions for product roadmaps.
-                    </p>
-                    <div class="flex flex-wrap justify-center gap-2 mb-4">
-                        <span class="bg-red-100 text-red-800 text-xs font-medium px-3 py-1 rounded-full dark:bg-red-900 dark:text-red-200">React</span>
-                        <span class="bg-red-100 text-red-800 text-xs font-medium px-3 py-1 rounded-full dark:bg-red-900 dark:text-red-200">Data Viz</span>
-                        <span class="bg-red-100 text-red-800 text-xs font-medium px-3 py-1 rounded-full dark:bg-red-900 dark:text-red-200">User Research</span>
-                        <span class="bg-red-100 text-red-800 text-xs font-medium px-3 py-1 rounded-full dark:bg-red-900 dark:text-red-200">Agile</span>
-                    </div>
-                    <div class="flex justify-center space-x-4">
-                        <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium flex items-center">
-                            Live Demo
-                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                        </a>
-                        <a href="#" class="text-gray-600 hover:text-gray-800 font-medium flex items-center dark:text-gray-400 dark:hover:text-gray-200">
-                            GitHub
-                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <hr class="border-t-2 border-gray-200 dark:border-gray-700 my-12 mx-auto w-4/5">
-
-    <section id="content" class="py-16 md:py-24 bg-gray-50 dark:bg-gray-800 transition-colors duration-300 rounded-xl shadow-inner mx-auto max-w-7xl px-6">
-        <div class="container mx-auto text-center">
-            <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-12">My Content Showcase</h2>
-            <p class="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
-                A glimpse into my work, thoughts, and interests through various media.
-            </p>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md border border-gray-200 dark:border-gray-600">
-                    <img src="https://www.youtube.com/watch?v=RB5dwzZbHmM" alt="Architecture Diagram" class="rounded-md mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Is NYC Congestion Pricing Working?</h3>
-                    <p class="text-gray-600 dark:text-gray-300 text-sm">
-                        TBD 1
-                    </p>
-                </div>
-                <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md border border-gray-200 dark:border-gray-600">
-                    <div class="relative w-full" style="padding-top: 56.25%;"> <iframe class="absolute top-0 left-0 w-full h-full rounded-md" src="https://www.youtube.com/watch?v=RB5dwzZbHmM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mt-4 mb-2">An Analysis of NYC Traffic</h3>
-                    <p class="text-gray-600 dark:text-gray-300 text-sm">
-                        A detailed video demonstration of the data I collected.
-                    </p>
-                </div>
-                <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md border border-gray-200 dark:border-gray-600">
-                    <img src="https://placehold.co/600x400/c0c0c0/333333?text=Cybersecurity+Concept" alt="Cybersecurity Concept" class="rounded-md mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Cybersecurity Threat Landscape</h3>
-                    <p class="text-gray-600 dark:text-gray-300 text-sm">
-                        Infographic illustrating common cybersecurity threats and mitigation strategies.
-                    </p>
-                </div>
-            </div>
-            <div class="mt-12">
-                <a href="#" class="bg-indigo-600 text-white hover:bg-indigo-700 px-8 py-4 rounded-full text-lg font-semibold shadow-lg transition-all duration-300 transform hover:scale-105">
-                    Explore More Content
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <hr class="border-t-2 border-gray-200 dark:border-gray-700 my-12 mx-auto w-4/5">
-
-    <section id="contact" class="py-16 md:py-24 bg-white dark:bg-gray-900 transition-colors duration-300 rounded-xl shadow-inner mx-auto max-w-7xl px-6">
-        <div class="container mx-auto text-center">
-            <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-8">Let's Connect</h2>
-            <p class="text-lg text-gray-600 dark:text-gray-300 mb-10 max-w-2xl mx-auto">
-                I'm always open to discussing new projects, collaborations, or opportunities. Feel free to reach out!
-            </p>
-            <div class="flex flex-col items-center space-y-6 md:space-y-0 md:flex-row md:justify-center md:space-x-8">
-                <a href="mailto:jared.hwee0@gmail.com" class="flex items-center text-indigo-600 hover:text-indigo-800 text-lg font-medium transition-colors duration-300">
-                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    jared.hwee0@gmail.com
-                </a>
-                <a href="https://www.linkedin.com/in/jaredhwee/" target="_blank" rel="noopener noreferrer" class="flex items-center text-indigo-600 hover:text-indigo-800 text-lg font-medium transition-colors duration-300">
-                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M0 1.146C0 .513.526 0 1.176 0h21.648c.65 0 1.176.513 1.176 1.146v21.708c0 .633-.526 1.146-1.176 1.146H1.176C.526 24 0 23.487 0 22.854V1.146zm4.929 20.37L1.146 17.51V1.146C1.146.513 1.672 0 2.322 0h2.607v21.516zM22.854 0H5.733v21.516h17.121c.65 0 1.176-.513 1.176-1.146V1.146c0-.633-.526-1.146-1.176-1.146zM8.012 8.012a.75.75 0 000 1.5h7.976a.75.75 0 000-1.5H8.012zm0 4.5a.75.75 0 000 1.5h7.976a.75.75 0 000-1.5H8.012zm0 4.5a.75.75 0 000 1.5h7.976a.75.75 0 000-1.5H8.012z" clip-rule="evenodd"></path></svg>
-                    LinkedIn
-                </a>
-                <a href="https://github.com/Jhwee2" target="_blank" rel="noopener noreferrer" class="flex items-center text-indigo-600 hover:text-indigo-800 text-lg font-medium transition-colors duration-300">
-                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12 0C5.373 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.6.11.82-.26.82-.577v-2.234c-3.338.726-4.042-1.61-4.042-1.61-.546-1.387-1.332-1.758-1.332-1.758-1.09-.745.083-.73.083-.73 1.205.085 1.838 1.238 1.838 1.238 1.07 1.833 2.808 1.304 3.492.997.108-.775.418-1.304.762-1.604-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.12-.3-.535-1.52.117-3.176 0 0 1.007-.322 3.301 1.23.957-.266 1.983-.4 3.003-.404 1.02.004 2.046.138 3.003.404 2.294-1.552 3.3-1.23 3.3-1.23.652 1.656.237 2.876.117 3.176.77.84 1.235 1.91 1.235 3.22 0 4.61-2.805 5.625-5.475 5.922.42.36.81.93.81 1.872v2.77c0 .318.213.69.825.577C20.565 21.8 24 17.302 24 12c0-6.627-5.373-12-12-12z" clip-rule="evenodd"></path></svg>
-                    GitHub
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-gray-800 text-white py-8 mt-8 rounded-t-lg shadow-inner">
-        <div class="container mx-auto text-center px-6">
-            <p>&copy; 2025 Jared Hwee. All rights reserved.</p>
-            <div class="flex justify-center space-x-6 mt-4">
-                <a href="mailto:jared.hwee0@gmail.com" class="text-gray-400 hover:text-white transition-colors duration-300">Email</a>
-                <a href="https://www.linkedin.com/in/jaredhwee/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors duration-300">LinkedIn</a>
-                <a href="https://github.com/Jhwee2" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors duration-300">GitHub</a>
-            </div>
-        </div>  
-    </footer>
-
-    <script src="script.js"></script>
-</body>
-</html>
+    </div>
+</section>
