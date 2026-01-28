@@ -110,3 +110,28 @@ function typeWriter(html, index) {
 window.onload = function() {
     loadExperience('healthfirst');
 };
+
+// Simple function to call your Agent
+async function askJared() {
+    const question = document.getElementById('userQuestion').value;
+    const responseBox = document.getElementById('agentResponse');
+    
+    responseBox.innerText = "Thinking...";
+    
+    // REPLACE with your AWS Lambda Function URL
+    const lambdaUrl = "https://YOUR_ID.lambda-url.us-east-1.on.aws/"; 
+
+    try {
+        const response = await fetch(lambdaUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question: question })
+        });
+        
+        const data = await response.json();
+        responseBox.innerText = data.answer;
+    } catch (error) {
+        responseBox.innerText = "Error contacting agent.";
+        console.error(error);
+    }
+}
