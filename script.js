@@ -119,7 +119,7 @@ async function askJared() {
     responseBox.innerText = "Thinking...";
     
     // REPLACE with your AWS Lambda Function URL
-    const lambdaUrl = "https://YOUR_ID.lambda-url.us-east-1.on.aws/"; 
+    const lambdaUrl = "https://r3zwzro2hyyjpe245p2nry7ycm0wtksm.lambda-url.us-east-1.on.aws/"; 
 
     try {
         const response = await fetch(lambdaUrl, {
