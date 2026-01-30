@@ -250,93 +250,96 @@
         </div>
     </div>
 
-    <script>
-        const LAMBDA_URL = "https://r3zwzro2hyyjpe245p2nry7ycm0wtksm.lambda-url.us-east-1.on.aws/"; 
+<script>
+    // 1. UPDATE THIS: Your specific API Gateway URL from the previous step
+    const API_GATEWAY_URL = "https://acxnljxubg.execute-api.us-east-1.amazonaws.com/prod"; 
 
-        const chatWidget = document.getElementById('chat-widget');
-        const messagesDiv = document.getElementById('chat-messages');
-        const userInput = document.getElementById('user-input');
-        const sendBtn = document.getElementById('send-btn');
+    // DOM Elements
+    const chatWidget = document.getElementById('chat-widget');
+    const messagesDiv = document.getElementById('chat-messages');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+    const terminalContent = document.getElementById('terminal-content');
+    const terminalScrollArea = document.getElementById('terminal-scroll-area');
 
-        function toggleChat() {
-            if (chatWidget.classList.contains('hidden')) {
-                chatWidget.classList.remove('hidden');
-                chatWidget.classList.add('flex');
-                setTimeout(() => userInput.focus(), 100);
+    // --- CHATBOT LOGIC ---
+
+    function toggleChat() {
+        if (chatWidget.classList.contains('hidden')) {
+            chatWidget.classList.remove('hidden');
+            chatWidget.classList.add('flex');
+            setTimeout(() => userInput.focus(), 100);
+        } else {
+            chatWidget.classList.add('hidden');
+            chatWidget.classList.remove('flex');
+        }
+    }
+
+    function handleKeyPress(e) {
+        if (e.key === 'Enter') sendMessage();
+    }
+
+    function appendMessage(text, sender) {
+        const div = document.createElement('div');
+        div.className = `chat-bubble ${sender}`;
+        div.innerHTML = text.replace(/\n/g, '<br>');
+        messagesDiv.appendChild(div);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    async function sendMessage() {
+        const text = userInput.value.trim();
+        if (!text) return;
+
+        // UI Updates
+        appendMessage(text, 'user');
+        userInput.value = '';
+        userInput.disabled = true;
+        sendBtn.disabled = true;
+
+        // Loading Indicator
+        const loadingId = 'loading-' + Date.now();
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'chat-bubble agent animate-pulse';
+        loadingDiv.id = loadingId;
+        loadingDiv.innerText = "Processing query...";
+        messagesDiv.appendChild(loadingDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+        try {
+            // THE FIX: Use API Gateway URL and 'message' key
+            const response = await fetch(API_GATEWAY_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: text }) 
+            });
+
+            const data = await response.json();
+            document.getElementById(loadingId).remove();
+
+            // THE FIX: Use 'reply' key from Python
+            if (data.reply) {
+                appendMessage(data.reply, 'agent');
             } else {
-                chatWidget.classList.add('hidden');
-                chatWidget.classList.remove('flex');
-            }
-        }
-
-        function handleKeyPress(e) {
-            if (e.key === 'Enter') sendMessage();
-        }
-
-        function appendMessage(text, sender) {
-            const div = document.createElement('div');
-            div.className = `chat-bubble ${sender}`;
-            // Convert newlines to HTML breaks
-            div.innerHTML = text.replace(/\n/g, '<br>');
-            messagesDiv.appendChild(div);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
-
-        async function sendMessage() {
-            const text = userInput.value.trim();
-            if (!text) return;
-
-            // 1. Add User Message
-            appendMessage(text, 'user');
-            userInput.value = '';
-            userInput.disabled = true;
-            sendBtn.disabled = true;
-
-            // 2. Add Loading Indicator
-            const loadingId = 'loading-' + Date.now();
-            const loadingDiv = document.createElement('div');
-            loadingDiv.className = 'chat-bubble agent animate-pulse';
-            loadingDiv.id = loadingId;
-            loadingDiv.innerText = "Processing query...";
-            messagesDiv.appendChild(loadingDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            try {
-                // 3. Call Lambda
-                const response = await fetch(LAMBDA_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ question: text })
-                });
-
-                const data = await response.json();
-                
-                // Remove loading
-                document.getElementById(loadingId).remove();
-
-                if (data.answer) {
-                    appendMessage(data.answer, 'agent');
-                } else if (data.error) {
-                    appendMessage("Error: " + data.error, 'agent');
-                } else {
-                    appendMessage("No response received.", 'agent');
-                }
-
-            } catch (err) {
-                console.error(err);
-                const loader = document.getElementById(loadingId);
-                if(loader) loader.remove();
-                appendMessage("System Error: Unable to contact API.", 'agent');
+                appendMessage("I couldn't find an answer to that.", 'agent');
             }
 
-            userInput.disabled = false;
-            sendBtn.disabled = false;
-            userInput.focus();
+        } catch (err) {
+            console.error(err);
+            const loader = document.getElementById(loadingId);
+            if(loader) loader.remove();
+            appendMessage("System Error: Unable to reach the agent.", 'agent');
         }
 
-        // --- EXISTING RESUME LOGIC ---
-        const experienceData = {
-            healthfirst: `
+        userInput.disabled = false;
+        sendBtn.disabled = false;
+        userInput.focus();
+    }
+
+    // --- RESUME / TERMINAL LOGIC ---
+
+    const experienceData = {
+        healthfirst: `
 <span class="syntax-keyword">class</span> <span class="text-yellow-300">Healthfirst</span>(ProductOwner):
     <span class="syntax-keyword">def</span> <span class="syntax-func">execute_strategy</span>(self):
         <span class="syntax-comment"># Automation & Enterprise Migration</span>
@@ -350,20 +353,16 @@
 
 <span class="text-white text-xl font-bold border-b border-gray-600 pb-1 mb-2 inline-block">Healthfirst</span>
 <br>
-• Secured $200,000 in documented annual departmental savings by leading the strategic migration to a new enterprise system and automating the full correspondence workflow (generation, lifecycle tracking, and compliant storage).
+• Secured $200,000 in documented annual departmental savings by leading the strategic migration to a new enterprise system.
 <br><br>
-• Drove strategic prioritization for the Product Backlog using data and stakeholder input to ensure alignment with the Product Goal and maximize return on investment.
+• Drove strategic prioritization for the Product Backlog using data and stakeholder input.
 <br><br>
-• Improved team execution and clarity by owning backlog refinement, crafting precise Gherkin user stories and acceptance criteria, and serving as the technical liaison to facilitate solution design for complex data integrations.
-<br><br>
-• Influenced the user experience (UX) and interface (UI) design for a key internal web application, collaborating with business users to reduce agent friction and streamline the enrollment process by 17.3%.
-            `,
-            
-            nys: `
+• Improved team execution by crafting precise Gherkin user stories and acceptance criteria.
+        `,
+        nys: `
 <span class="syntax-keyword">import</span> servicenow_sdk <span class="syntax-keyword">as</span> snow
 
 <span class="syntax-keyword">def</span> <span class="syntax-func">automate_workflow</span>(user_feedback):
-    <span class="syntax-comment"># Optimized approval scripts using JavaScript</span>
     complaints = snow.analytics.get_complaints()
     <span class="syntax-keyword">if</span> automation_enabled:
         complaints -= <span class="text-orange-300">0.35</span> <span class="syntax-comment"># Reduced by 35%</span>
@@ -371,102 +370,76 @@
 
 <span class="text-indigo-400">>> Fetching project logs...</span><br><br>
 
-<span class="text-white text-xl font-bold border-b border-gray-600 pb-1 mb-2 inline-block">NYS Office of Information Technology Services</span>
+<span class="text-white text-xl font-bold border-b border-gray-600 pb-1 mb-2 inline-block">NYS Office of ITS</span>
 <br>
-• Orchestrated 10+ WebEx meetings with internal and external end-users to define project scope and user stories.
+• Orchestrated 10+ WebEx meetings with internal and external end-users to define project scope.
 <br><br>
 • Leveraged JavaScript to develop scripts on ServiceNow to automate approvals reducing users’ complaints 35%.
-<br><br>
-• Worked with multiple teams to establish product backlog priority and improvements to user experience.
-            `,
-            
-            unadat: `
-<span class="syntax-keyword">from</span> agile <span class="syntax-keyword">import</span> Scrum
-<span class="syntax-keyword">from</span> market_research <span class="syntax-keyword">import</span> Demographic_Analysis
-
+        `,
+        unadat: `
 <span class="syntax-keyword">def</span> <span class="syntax-func">launch_product</span>():
-    target = Demographic_Analysis(segment=<span class="syntax-string">"Youth"</span>)
     app = Project(name=<span class="syntax-string">"Chores"</span>, type=<span class="syntax-string">"FinTech"</span>)
-    
     <span class="syntax-keyword">while</span> app.in_development:
         Scrum.daily_standup(team_size=5)
-        app.refine_features()
 
 <span class="text-indigo-400">>> Initializing Internship module...</span><br><br>
 
 <span class="text-white text-xl font-bold border-b border-gray-600 pb-1 mb-2 inline-block">Unadat</span>
 <br>
-• Collaborated with a team of 5 software engineers by setting user stories on JIRA and hosted daily meetings.
-<br><br>
-• Researched personal finance tools to be deployed as web applications and presented them to C-suite executives.
+• Collaborated with a team of 5 software engineers by setting user stories on JIRA.
 <br><br>
 • Planned, designed, and implemented a web application called “Chores” to expand target demographic to youth.
-            `,
-            
-            mta: `
-<span class="syntax-keyword">SELECT</span> * <span class="syntax-keyword">FROM</span> financial_reports 
-<span class="syntax-keyword">INNER JOIN</span> data_visualization <span class="syntax-keyword">ON</span> id;
-
-<span class="syntax-comment">-- Automating legacy workflows</span>
-<span class="syntax-keyword">UPDATE</span> workflows
-<span class="syntax-keyword">SET</span> status = <span class="syntax-string">'Automated'</span>
-<span class="syntax-keyword">WHERE</span> tool IN (<span class="syntax-string">'SQL'</span>, <span class="syntax-string">'Power Automate'</span>);
+        `,
+        mta: `
+<span class="syntax-keyword">SELECT</span> * <span class="syntax-keyword">FROM</span> financial_reports;
+<span class="syntax-keyword">UPDATE</span> workflows <span class="syntax-keyword">SET</span> status = <span class="syntax-string">'Automated'</span>;
 
 <span class="text-indigo-400">>> Querying Data Warehouse...</span><br><br>
 
-<span class="text-white text-xl font-bold border-b border-gray-600 pb-1 mb-2 inline-block">Metropolitan Transit Authority</span>
+<span class="text-white text-xl font-bold border-b border-gray-600 pb-1 mb-2 inline-block">MTA</span>
 <br>
-• Constructed RDBMS using SQL on MS Access to generate financial analytical reports for company leaders.
-<br><br>
-• Migrated 3+ Excel spreadsheets to a single database to visually display and create relationships between the data.
+• Constructed RDBMS using SQL on MS Access to generate financial analytical reports.
 <br><br>
 • Automated 4+ workflow activities by developing macros in Access, Office Power Automate, and Excel.
-            `
-        };
+        `
+    };
 
-        let currentTypingTimeout;
-        const terminalContent = document.getElementById('terminal-content');
-        const terminalScrollArea = document.getElementById('terminal-scroll-area');
+    let currentTypingTimeout;
 
-        function loadExperience(companyKey) {
-            // Reset Buttons
-            document.querySelectorAll('.exp-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
+    function loadExperience(companyKey) {
+        // Reset Visuals
+        document.querySelectorAll('.exp-btn').forEach(btn => btn.classList.remove('active'));
+        const activeBtn = document.getElementById(`btn-${companyKey}`);
+        if(activeBtn) activeBtn.classList.add('active');
 
-            // Activate Selected Button
-            const activeBtn = document.getElementById(`btn-${companyKey}`);
-            if(activeBtn) activeBtn.classList.add('active');
+        // Reset Terminal
+        if (currentTypingTimeout) clearTimeout(currentTypingTimeout);
+        terminalContent.innerHTML = '';
 
-            // Reset Typing
-            if (currentTypingTimeout) clearTimeout(currentTypingTimeout);
-            terminalContent.innerHTML = '';
+        // Start Typing
+        typeWriter(experienceData[companyKey], 0);
+    }
 
-            // Start Typing
-            const textHTML = experienceData[companyKey];
-            typeWriter(textHTML, 0);
-        }
-
-        function typeWriter(html, index) {
-            if (index < html.length) {
-                if (html.charAt(index) === '<') {
-                    let endIndex = html.indexOf('>', index);
-                    terminalContent.innerHTML += html.slice(index, endIndex + 1);
-                    index = endIndex + 1;
-                } else {
-                    terminalContent.innerHTML += html.charAt(index);
-                    index++;
-                }
-                
-                terminalScrollArea.scrollTop = terminalScrollArea.scrollHeight;
-                currentTypingTimeout = setTimeout(() => typeWriter(html, index), 2); 
+    function typeWriter(html, index) {
+        if (index < html.length) {
+            if (html.charAt(index) === '<') {
+                let endIndex = html.indexOf('>', index);
+                terminalContent.innerHTML += html.slice(index, endIndex + 1);
+                index = endIndex + 1;
+            } else {
+                terminalContent.innerHTML += html.charAt(index);
+                index++;
             }
+            terminalScrollArea.scrollTop = terminalScrollArea.scrollHeight;
+            currentTypingTimeout = setTimeout(() => typeWriter(html, index), 2); 
         }
+    }
 
-        window.onload = function() {
-            loadExperience('healthfirst');
-        };
-    </script>
+    // Initialize
+    window.onload = function() {
+        loadExperience('healthfirst');
+    };
+</script>
 </body>
 </html>
 
