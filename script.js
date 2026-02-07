@@ -1,4 +1,15 @@
-// --- Existing Smooth Scroll Code (Keep this) ---
+// Configuration - Update this with your API Gateway URL
+const API_GATEWAY_URL = "https://i0s3aejbi2.execute-api.us-east-1.amazonaws.com/prod/chat";
+
+// DOM Elements - Will be initialized when page loads
+let chatWidget;
+let messagesDiv;
+let userInput;
+let sendBtn;
+let terminalContent;
+let terminalScrollArea;
+
+// --- SMOOTH SCROLL FOR NAVIGATION ---
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -8,90 +19,172 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// --- NEW: Experience Terminal Logic ---
+// --- CHATBOT LOGIC ---
 
-// 1. Define the Data (Your Resume Content)
+function toggleChat() {
+    if (chatWidget.classList.contains('hidden')) {
+        chatWidget.classList.remove('hidden');
+        chatWidget.classList.add('flex');
+        setTimeout(() => userInput.focus(), 100);
+    } else {
+        chatWidget.classList.add('hidden');
+        chatWidget.classList.remove('flex');
+    }
+}
+
+function handleKeyPress(e) {
+    if (e.key === 'Enter') sendMessage();
+}
+
+function appendMessage(text, sender) {
+    const div = document.createElement('div');
+    div.className = `chat-bubble ${sender}`;
+    div.innerHTML = text.replace(/\n/g, '<br>');
+    messagesDiv.appendChild(div);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+async function sendMessage() {
+    const text = userInput.value.trim();
+    if (!text) return;
+
+    // UI Updates
+    appendMessage(text, 'user');
+    userInput.value = '';
+    userInput.disabled = true;
+    sendBtn.disabled = true;
+
+    // Loading Indicator
+    const loadingId = 'loading-' + Date.now();
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'chat-bubble agent animate-pulse';
+    loadingDiv.id = loadingId;
+    loadingDiv.innerText = "Processing query...";
+    messagesDiv.appendChild(loadingDiv);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+    try {
+        const response = await fetch(API_GATEWAY_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        document.getElementById(loadingId).remove();
+
+        // Handle different possible response formats
+        const botReply = data.reply || data.response || data.message || data.body;
+
+        if (botReply) {
+            appendMessage(botReply, 'agent');
+        } else {
+            console.log('Unexpected response format:', data);
+            appendMessage("I received a response but couldn't parse it. Check the console for details.", 'agent');
+        }
+
+    } catch (err) {
+        console.error('Chatbot error:', err);
+        const loader = document.getElementById(loadingId);
+        if (loader) loader.remove();
+        appendMessage(`System Error: ${err.message}`, 'agent');
+    }
+
+    userInput.disabled = false;
+    sendBtn.disabled = false;
+    userInput.focus();
+}
+
+// --- RESUME / TERMINAL LOGIC ---
+
 const experienceData = {
     healthfirst: `
-<span class="text-white font-bold">Role:</span> Product Owner
-<span class="text-white font-bold">Location:</span> New York, NY
-<span class="text-white font-bold">Period:</span> Sept 2023 - Present
+<span class="syntax-keyword">class</span> <span class="text-yellow-300">Healthfirst</span>(ProductOwner):
+    <span class="syntax-keyword">def</span> <span class="syntax-func">execute_strategy</span>(self):
+        <span class="syntax-comment"># Automation & Enterprise Migration</span>
+        savings = <span class="syntax-keyword">await</span> system.migrate_and_automate(
+            target=<span class="syntax-string">"Enterprise_System"</span>,
+            workflow=<span class="syntax-string">"Correspondence"</span>
+        )
+        <span class="syntax-keyword">return</span> savings <span class="syntax-comment"># Result: $200k annual savings</span>
 
-<span class="text-blue-300">> parameters = { "efficiency": "high", "savings": 200000 }</span>
-<span class="text-blue-300">> run_automation_protocol()</span>
+<span class="text-indigo-400">>> Running impact analysis...</span><br><br>
 
-• Secured $200,000 in documented annual departmental savings by leading the strategic migration to a new enterprise system and automating the full correspondence workflow.
-• Drove strategic prioritization for the Product Backlog using data and stakeholder input to ensure alignment with the Product Goal and maximize ROI.
-• Improved team execution by owning backlog refinement, crafting precise Gherkin user stories (Behavior Driven Development), and serving as the technical liaison for complex data integrations.
-• Influenced the UX/UI design for a key internal web application, collaborating with business users to reduce agent friction and streamline the enrollment process by 17.3%.
-    `,
+<span class="text-white text-xl font-bold border-b border-gray-600 pb-1 mb-2 inline-block">Healthfirst</span>
+<br>
+• Secured $200,000 in documented annual departmental savings by leading the strategic migration to a new enterprise system.
+<br><br>
+• Drove strategic prioritization for the Product Backlog using data and stakeholder input.
+<br><br>
+• Improved team execution by crafting precise Gherkin user stories and acceptance criteria.
+        `,
     nys: `
-<span class="text-white font-bold">Role:</span> ServiceNow Developer
-<span class="text-white font-bold">Location:</span> New York, NY
-<span class="text-white font-bold">Period:</span> Jun 2023 – Aug 2023
+<span class="syntax-keyword">import</span> servicenow_sdk <span class="syntax-keyword">as</span> snow
 
-<span class="text-blue-300">> import automation_module</span>
-<span class="text-blue-300">> execute_script(target="workflow")</span>
+<span class="syntax-keyword">def</span> <span class="syntax-func">automate_workflow</span>(user_feedback):
+    complaints = snow.analytics.get_complaints()
+    <span class="syntax-keyword">if</span> automation_enabled:
+        complaints -= <span class="text-orange-300">0.35</span> <span class="syntax-comment"># Reduced by 35%</span>
+    <span class="syntax-keyword">return</span> <span class="syntax-string">"Success"</span>
 
-• Orchestrated 10+ WebEx meetings with internal and external end-users to define project scope and user stories.
-• Leveraged JavaScript to develop scripts on ServiceNow to automate approvals, reducing user complaints by 35%.
-• Worked with multiple teams to establish product backlog priority and improvements to user experience.
-    `,
+<span class="text-indigo-400">>> Fetching project logs...</span><br><br>
+
+<span class="text-white text-xl font-bold border-b border-gray-600 pb-1 mb-2 inline-block">NYS Office of ITS</span>
+<br>
+• Orchestrated 10+ WebEx meetings with internal and external end-users to define project scope.
+<br><br>
+• Leveraged JavaScript to develop scripts on ServiceNow to automate approvals reducing users' complaints 35%.
+        `,
     unadat: `
-<span class="text-white font-bold">Role:</span> Project Manager Intern
-<span class="text-white font-bold">Location:</span> New York, NY
-<span class="text-white font-bold">Period:</span> Jul 2022 – Aug 2022
+<span class="syntax-keyword">def</span> <span class="syntax-func">launch_product</span>():
+    app = Project(name=<span class="syntax-string">"Chores"</span>, type=<span class="syntax-string">"FinTech"</span>)
+    <span class="syntax-keyword">while</span> app.in_development:
+        Scrum.daily_standup(team_size=5)
 
-<span class="text-blue-300">> initialize_project(name="Chores")</span>
-<span class="text-blue-300">> analyze_market_fit()</span>
+<span class="text-indigo-400">>> Initializing Internship module...</span><br><br>
 
-• Collaborated with a team of 5 software engineers by setting user stories on JIRA and hosted daily meetings.
-• Researched personal finance tools to be deployed as web applications and presented them to C-suite executives.
+<span class="text-white text-xl font-bold border-b border-gray-600 pb-1 mb-2 inline-block">Unadat</span>
+<br>
+• Collaborated with a team of 5 software engineers by setting user stories on JIRA.
+<br><br>
 • Planned, designed, and implemented a web application called "Chores" to expand target demographic to youth.
-    `,
+        `,
     mta: `
-<span class="text-white font-bold">Role:</span> Data Analyst Intern
-<span class="text-white font-bold">Location:</span> New York, NY
-<span class="text-white font-bold">Period:</span> Mar 2022 – Jun 2022
+<span class="syntax-keyword">SELECT</span> * <span class="syntax-keyword">FROM</span> financial_reports;
+<span class="syntax-keyword">UPDATE</span> workflows <span class="syntax-keyword">SET</span> status = <span class="syntax-string">'Automated'</span>;
 
-<span class="text-blue-300">> SELECT * FROM financial_reports WHERE optimized = TRUE;</span>
-<span class="text-blue-300">> connect_database()</span>
+<span class="text-indigo-400">>> Querying Data Warehouse...</span><br><br>
 
-• Constructed RDBMS using SQL on MS Access to generate financial analytical reports for company leaders.
-• Migrated 3+ Excel spreadsheets to a single database to visually display and create relationships between the data.
+<span class="text-white text-xl font-bold border-b border-gray-600 pb-1 mb-2 inline-block">MTA</span>
+<br>
+• Constructed RDBMS using SQL on MS Access to generate financial analytical reports.
+<br><br>
 • Automated 4+ workflow activities by developing macros in Access, Office Power Automate, and Excel.
-    `
+        `
 };
 
-// 2. Variables to manage the typing effect
 let currentTypingTimeout;
-const terminalContent = document.getElementById('terminal-content');
 
-// 3. The Function to Load Experience
 function loadExperience(companyKey) {
-    // A. Update Buttons (Visual State)
-    document.querySelectorAll('.exp-btn').forEach(btn => {
-        btn.classList.remove('active', 'bg-indigo-600', 'text-white', 'shadow-lg', 'border-indigo-400');
-        btn.classList.add('text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-100', 'dark:hover:bg-gray-800', 'border-transparent');
-    });
-
+    // Reset Visuals
+    document.querySelectorAll('.exp-btn').forEach(btn => btn.classList.remove('active'));
     const activeBtn = document.getElementById(`btn-${companyKey}`);
-    activeBtn.classList.add('active', 'bg-indigo-600', 'text-white', 'shadow-lg', 'border-indigo-400');
-    activeBtn.classList.remove('text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-100', 'dark:hover:bg-gray-800', 'border-transparent');
+    if (activeBtn) activeBtn.classList.add('active');
 
-    // B. Clear current text and stop any ongoing typing
+    // Reset Terminal
     if (currentTypingTimeout) clearTimeout(currentTypingTimeout);
     terminalContent.innerHTML = '';
 
-    // C. Start Typing Effect
-    const textHTML = experienceData[companyKey];
-    typeWriter(textHTML, 0);
+    // Start Typing
+    typeWriter(experienceData[companyKey], 0);
 }
 
-// 4. The Typewriter Logic (Advanced: handles HTML tags)
 function typeWriter(html, index) {
     if (index < html.length) {
-        // If we encounter an HTML tag, append the whole tag instantly so we don't see raw code
         if (html.charAt(index) === '<') {
             let endIndex = html.indexOf('>', index);
             terminalContent.innerHTML += html.slice(index, endIndex + 1);
@@ -100,38 +193,21 @@ function typeWriter(html, index) {
             terminalContent.innerHTML += html.charAt(index);
             index++;
         }
-        
-        // Adjust speed here (lower number = faster)
-        currentTypingTimeout = setTimeout(() => typeWriter(html, index), 5); 
+        terminalScrollArea.scrollTop = terminalScrollArea.scrollHeight;
+        currentTypingTimeout = setTimeout(() => typeWriter(html, index), 2);
     }
 }
 
-// 5. Initialize with the first job
+// Initialize when page loads
 window.onload = function() {
+    // Initialize DOM elements
+    chatWidget = document.getElementById('chat-widget');
+    messagesDiv = document.getElementById('chat-messages');
+    userInput = document.getElementById('user-input');
+    sendBtn = document.getElementById('send-btn');
+    terminalContent = document.getElementById('terminal-content');
+    terminalScrollArea = document.getElementById('terminal-scroll-area');
+
+    // Load first experience
     loadExperience('healthfirst');
 };
-
-// Simple function to call your Agent
-async function askJared() {
-    const question = document.getElementById('userQuestion').value;
-    const responseBox = document.getElementById('agentResponse');
-    
-    responseBox.innerText = "Thinking...";
-    
-    // REPLACE with your AWS Lambda Function URL
-    const lambdaUrl = "https://r3zwzro2hyyjpe245p2nry7ycm0wtksm.lambda-url.us-east-1.on.aws/"; 
-
-    try {
-        const response = await fetch(lambdaUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ question: question })
-        });
-        
-        const data = await response.json();
-        responseBox.innerText = data.answer;
-    } catch (error) {
-        responseBox.innerText = "Error contacting agent.";
-        console.error(error);
-    }
-}

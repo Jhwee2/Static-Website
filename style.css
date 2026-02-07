@@ -1,25 +1,97 @@
-/* Terminal Cursor Animation */
+/* Base Styles */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0f172a; /* Slate-900 */
+    color: #e2e8f0;
+}
+
+/* Terminal Styling */
+.font-mono {
+    font-family: 'Fira Code', monospace;
+}
+
+/* Cursor Animation */
 @keyframes blink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0; }
 }
 
-/* Custom scrollbar for the terminal window to keep it looking techy */
-.terminal-window::-webkit-scrollbar {
+.cursor-blink {
+    animation: blink 1s step-end infinite;
+}
+
+/* Custom Scrollbar */
+.terminal-window::-webkit-scrollbar,
+.chat-scroll::-webkit-scrollbar {
     width: 8px;
 }
-.terminal-window::-webkit-scrollbar-track {
-    background: #1a202c; 
+
+.terminal-window::-webkit-scrollbar-track,
+.chat-scroll::-webkit-scrollbar-track {
+    background: #1e293b;
 }
-.terminal-window::-webkit-scrollbar-thumb {
-    background: #4a5568; 
+
+.terminal-window::-webkit-scrollbar-thumb,
+.chat-scroll::-webkit-scrollbar-thumb {
+    background: #475569;
     border-radius: 4px;
 }
 
 /* Active State for Experience Buttons */
 .exp-btn.active {
+    background-color: #6366f1 !important; /* Indigo-500 */
+    color: white !important;
+    border-left: 4px solid #a5b4fc !important; /* Indigo-300 */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+/* Ensure sub-text in active button turns white/light */
+.exp-btn.active .text-slate-400 {
+    color: #e0e7ff !important; /* Light indigo */
+}
+
+.exp-btn.active .text-slate-500 {
+    color: #c7d2fe !important; /* Lighter indigo */
+}
+
+/* Syntax Highlighting Colors */
+.syntax-keyword {
+    color: #c678dd;
+}
+
+.syntax-func {
+    color: #61afef;
+}
+
+.syntax-string {
+    color: #98c379;
+}
+
+.syntax-comment {
+    color: #5c6370;
+    font-style: italic;
+}
+
+/* Chat Widget Specifics */
+.chat-bubble {
+    position: relative;
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.chat-bubble.user {
     background-color: #4f46e5; /* Indigo-600 */
     color: white;
-    border-left-color: #818cf8; /* Indigo-400 */
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+}
+
+.chat-bubble.agent {
+    background-color: #334155; /* Slate-700 */
+    color: #f1f5f9;
+    align-self: flex-start;
+    border-bottom-left-radius: 2px;
 }
